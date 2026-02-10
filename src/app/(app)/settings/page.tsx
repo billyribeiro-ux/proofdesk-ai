@@ -27,7 +27,7 @@ export default function SettingsPage() {
 
   return (
     <div className="space-y-6">
-      <div>
+      <div className="animate-fade-in-up">
         <h1 className="text-2xl font-bold text-text">Settings</h1>
         <p className="text-sm text-text-muted mt-1">Manage your account and preferences</p>
       </div>
@@ -42,7 +42,7 @@ export default function SettingsPage() {
                   key={tab.id}
                   onClick={() => setActiveTab(tab.id)}
                   className={cn(
-                    "flex items-center gap-2 rounded-[var(--radius-lg)] px-3 py-2 text-sm font-medium transition-colors text-left",
+                    "flex items-center gap-2 rounded-[var(--radius-lg)] px-3 py-2 text-sm font-medium transition-all duration-200 text-left",
                     activeTab === tab.id ? "bg-primary-light text-primary" : "text-text-muted hover:bg-bg-subtle hover:text-text"
                   )}
                   aria-current={activeTab === tab.id ? "page" : undefined}
@@ -57,7 +57,7 @@ export default function SettingsPage() {
 
         <div className="flex-1 min-w-0">
           {activeTab === "profile" && (
-            <Card>
+            <Card className="glow-card animate-fade-in-up">
               <CardHeader><CardTitle>Profile</CardTitle></CardHeader>
               <CardContent className="space-y-4">
                 <Input label="Name" defaultValue={user?.name ?? ""} />
@@ -71,7 +71,7 @@ export default function SettingsPage() {
           )}
 
           {activeTab === "notifications" && (
-            <Card>
+            <Card className="glow-card animate-fade-in-up">
               <CardHeader><CardTitle>Notification Preferences</CardTitle></CardHeader>
               <CardContent className="space-y-4">
                 {[
@@ -99,7 +99,7 @@ export default function SettingsPage() {
           )}
 
           {activeTab === "appearance" && (
-            <Card>
+            <Card className="glow-card animate-fade-in-up">
               <CardHeader><CardTitle>Appearance</CardTitle></CardHeader>
               <CardContent className="space-y-4">
                 <div>
@@ -110,7 +110,7 @@ export default function SettingsPage() {
                         key={t}
                         onClick={() => setTheme(t)}
                         className={cn(
-                          "rounded-[var(--radius-xl)] border-2 p-4 text-center transition-colors",
+                          "rounded-[var(--radius-xl)] border-2 p-4 text-center transition-all duration-200 hover:scale-[1.02]",
                           theme === t ? "border-primary bg-primary-light" : "border-border hover:border-border-strong"
                         )}
                       >
@@ -125,7 +125,7 @@ export default function SettingsPage() {
           )}
 
           {activeTab === "shortcuts" && (
-            <Card>
+            <Card className="glow-card animate-fade-in-up">
               <CardHeader><CardTitle>Keyboard Shortcuts</CardTitle></CardHeader>
               <CardContent className="space-y-4">
                 <div className="flex items-center justify-between">

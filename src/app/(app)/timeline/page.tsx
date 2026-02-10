@@ -54,7 +54,7 @@ export default function TimelinePage() {
 
   return (
     <div className="space-y-6">
-      <div className="flex items-center justify-between">
+      <div className="flex items-center justify-between animate-fade-in-up">
         <div>
           <h1 className="text-2xl font-bold text-text">Timeline</h1>
           <p className="text-sm text-text-muted mt-1">Canonical view of all work events across projects</p>
@@ -95,13 +95,13 @@ export default function TimelinePage() {
       ) : events.length === 0 ? (
         <EmptyState icon={<Clock className="h-6 w-6" />} title="No events found" description={search ? "No events match your search." : "Connect your tools to start ingesting work events."} />
       ) : (
-        <div className="relative">
-          <div className="absolute left-6 top-0 bottom-0 w-px bg-border" aria-hidden="true" />
+        <div className="relative animate-fade-in-up" style={{ animationDelay: "100ms" }}>
+          <div className="absolute left-6 top-0 bottom-0 w-px bg-border/60" aria-hidden="true" />
           <div className="space-y-1">
             {events.map((event) => (
               <div key={event.id} className="relative pl-14">
-                <div className="absolute left-[18px] top-5 h-3 w-3 rounded-full border-2 border-primary bg-bg-elevated" aria-hidden="true" />
-                <Card padding="sm" className="hover:shadow-[var(--shadow-md)] transition-shadow">
+                <div className="absolute left-[18px] top-5 h-3 w-3 rounded-full border-2 border-primary bg-bg-elevated animate-pulse-glow" aria-hidden="true" />
+                <Card padding="sm" className="glow-card transition-all duration-200 hover:-translate-y-0.5">
                   <div className="flex items-start justify-between gap-3">
                     <div className="min-w-0 flex-1">
                       <div className="flex items-center gap-2 mb-1">

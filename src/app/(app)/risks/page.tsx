@@ -54,7 +54,7 @@ export default function RisksPage() {
 
   return (
     <div className="space-y-6">
-      <div className="flex items-center justify-between">
+      <div className="flex items-center justify-between animate-fade-in-up">
         <div>
           <h1 className="text-2xl font-bold text-text">Risk Monitor</h1>
           <p className="text-sm text-text-muted mt-1">Track scope creep, delivery risks, and blockers</p>
@@ -65,10 +65,10 @@ export default function RisksPage() {
         </Button>
       </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-        <Card padding="md">
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 stagger-children">
+        <Card padding="md" className="glow-card">
           <div className="flex items-center gap-3">
-            <div className="h-10 w-10 rounded-[var(--radius-lg)] bg-danger-light flex items-center justify-center">
+            <div className="h-10 w-10 rounded-[var(--radius-lg)] bg-danger-light flex items-center justify-center transition-transform duration-300 group-hover:scale-110">
               <AlertTriangle className="h-5 w-5 text-danger" />
             </div>
             <div>
@@ -77,9 +77,9 @@ export default function RisksPage() {
             </div>
           </div>
         </Card>
-        <Card padding="md">
+        <Card padding="md" className="glow-card">
           <div className="flex items-center gap-3">
-            <div className="h-10 w-10 rounded-[var(--radius-lg)] bg-warning-light flex items-center justify-center">
+            <div className="h-10 w-10 rounded-[var(--radius-lg)] bg-warning-light flex items-center justify-center transition-transform duration-300 group-hover:scale-110">
               <Shield className="h-5 w-5 text-warning" />
             </div>
             <div>
@@ -88,9 +88,9 @@ export default function RisksPage() {
             </div>
           </div>
         </Card>
-        <Card padding="md">
+        <Card padding="md" className="glow-card">
           <div className="flex items-center gap-3">
-            <div className="h-10 w-10 rounded-[var(--radius-lg)] bg-info-light flex items-center justify-center">
+            <div className="h-10 w-10 rounded-[var(--radius-lg)] bg-info-light flex items-center justify-center transition-transform duration-300 group-hover:scale-110">
               <CheckCircle2 className="h-5 w-5 text-info" />
             </div>
             <div>
@@ -123,7 +123,7 @@ export default function RisksPage() {
       ) : (
         <div className="space-y-3">
           {filtered.map((risk) => (
-            <Card key={risk.id} padding="md" className={risk.resolved ? "opacity-60" : ""}>
+            <Card key={risk.id} padding="md" className={`glow-card transition-all duration-200 hover:-translate-y-0.5 ${risk.resolved ? "opacity-60" : ""}`}>
               <div className="flex items-start justify-between gap-4">
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center gap-2 mb-1">

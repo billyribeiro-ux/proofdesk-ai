@@ -51,7 +51,7 @@ export default function ApprovalsPage() {
 
   return (
     <div className="space-y-6">
-      <div className="flex items-center justify-between">
+      <div className="flex items-center justify-between animate-fade-in-up">
         <div>
           <h1 className="text-2xl font-bold text-text">Approvals Center</h1>
           <p className="text-sm text-text-muted mt-1">
@@ -85,7 +85,7 @@ export default function ApprovalsPage() {
           {filtered.map((approval) => {
             const config = statusConfig[approval.status] ?? { variant: "default" as const, label: approval.status };
             return (
-              <Card key={approval.id} padding="md">
+              <Card key={approval.id} padding="md" className="glow-card transition-all duration-200 hover:-translate-y-0.5">
                 <div className="flex items-start justify-between gap-4">
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-2 mb-1">

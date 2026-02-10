@@ -54,7 +54,7 @@ export default function DemoPage() {
 
   return (
     <div className="space-y-6">
-      <div className="flex items-center justify-between">
+      <div className="flex items-center justify-between animate-fade-in-up">
         <div>
           <h1 className="text-2xl font-bold text-text">Demo Simulator</h1>
           <p className="text-sm text-text-muted mt-1">Interactive scenario playback with seeded data</p>
@@ -69,18 +69,18 @@ export default function DemoPage() {
 
       {!demo.isActive ? (
         <>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 stagger-children">
             {scenarios.map((scenario) => {
               const Icon = scenario.icon;
               return (
                 <Card
                   key={scenario.id}
                   padding="md"
-                  className={`cursor-pointer transition-all hover:shadow-[var(--shadow-md)] ${selectedScenario === scenario.id ? "ring-2 ring-primary" : ""}`}
+                  className={`cursor-pointer glow-card transition-all duration-300 hover:-translate-y-1 ${selectedScenario === scenario.id ? "ring-2 ring-primary" : ""}`}
                   onClick={() => setSelectedScenario(scenario.id)}
                 >
                   <div className="flex items-start gap-3">
-                    <div className={`h-10 w-10 rounded-[var(--radius-lg)] bg-bg-subtle flex items-center justify-center ${scenario.color}`}>
+                    <div className={`h-10 w-10 rounded-[var(--radius-lg)] bg-bg-subtle flex items-center justify-center transition-transform duration-300 group-hover:scale-110 ${scenario.color}`}>
                       <Icon className="h-5 w-5" aria-hidden="true" />
                     </div>
                     <div className="flex-1 min-w-0">
@@ -109,7 +109,7 @@ export default function DemoPage() {
       ) : (
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           {/* Playback Controls */}
-          <Card className="lg:col-span-1">
+          <Card className="lg:col-span-1 glow-card animate-fade-in-up">
             <CardHeader>
               <CardTitle>Playback Controls</CardTitle>
               <CardDescription>{activeScenario?.name}</CardDescription>
@@ -151,7 +151,7 @@ export default function DemoPage() {
           </Card>
 
           {/* Step Timeline */}
-          <Card padding="none" className="lg:col-span-2">
+          <Card padding="none" className="lg:col-span-2 glow-card animate-fade-in-up" style={{ animationDelay: "100ms" }}>
             <CardHeader className="px-6 pt-6">
               <CardTitle>Scenario Steps</CardTitle>
             </CardHeader>

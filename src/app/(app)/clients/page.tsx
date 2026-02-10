@@ -73,7 +73,7 @@ const columns: Column<ClientRow>[] = [
     key: "actions",
     header: "",
     render: () => (
-      <button className="p-1 rounded-[var(--radius-md)] text-text-muted hover:text-text hover:bg-bg-subtle transition-colors" aria-label="More actions">
+      <button className="p-1 rounded-[var(--radius-md)] text-text-muted hover:text-text hover:bg-bg-subtle transition-all duration-150 hover:scale-110" aria-label="More actions">
         <MoreHorizontal className="h-4 w-4" />
       </button>
     ),
@@ -99,7 +99,7 @@ export default function ClientsPage() {
 
   return (
     <div className="space-y-6">
-      <div className="flex items-center justify-between">
+      <div className="flex items-center justify-between animate-fade-in-up">
         <div>
           <h1 className="text-2xl font-bold text-text">Clients</h1>
           <p className="text-sm text-text-muted mt-1">Manage your client relationships</p>
@@ -121,8 +121,8 @@ export default function ClientsPage() {
           onRetry={() => refetch()}
         />
       ) : (
-        <Card padding="none">
-          <div className="flex items-center gap-3 p-4 border-b border-border">
+        <Card padding="none" className="glow-card animate-fade-in-up" style={{ animationDelay: "100ms" }}>
+          <div className="flex items-center gap-3 p-4 border-b border-border/60">
             <div className="relative flex-1 max-w-sm">
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-text-muted" />
               <Input

@@ -49,8 +49,8 @@ export default function ProjectDetailPage({ params }: { params: Promise<{ id: st
 
   return (
     <div className="space-y-6">
-      <div className="flex items-center gap-3">
-        <Link href={ROUTES.PROJECTS} className="rounded-[var(--radius-md)] p-1.5 text-text-muted hover:bg-bg-subtle hover:text-text transition-colors" aria-label="Back to projects">
+      <div className="flex items-center gap-3 animate-fade-in-up">
+        <Link href={ROUTES.PROJECTS} className="rounded-[var(--radius-md)] p-1.5 text-text-muted hover:bg-bg-subtle hover:text-text transition-all duration-150" aria-label="Back to projects">
           <ArrowLeft className="h-5 w-5" />
         </Link>
         <div className="flex-1">
@@ -74,7 +74,7 @@ export default function ProjectDetailPage({ params }: { params: Promise<{ id: st
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         <div className="lg:col-span-2 space-y-6">
-          <Card>
+          <Card className="glow-card animate-fade-in-up" style={{ animationDelay: "100ms" }}>
             <CardHeader><CardTitle>Overview</CardTitle></CardHeader>
             <CardContent className="space-y-4">
               {project.description && <p className="text-sm text-text-muted">{project.description}</p>}
@@ -107,10 +107,10 @@ export default function ProjectDetailPage({ params }: { params: Promise<{ id: st
             </CardContent>
           </Card>
 
-          <Card>
-            <CardHeader>
+          <Card className="glow-card animate-fade-in-up" style={{ animationDelay: "200ms" }}>
+            <CardHeader row>
               <CardTitle>Recent Activity</CardTitle>
-              <Link href={ROUTES.TIMELINE} className="text-sm text-primary hover:text-primary-hover">View full timeline</Link>
+              <Link href={ROUTES.TIMELINE} className="group text-sm text-primary hover:text-primary-hover transition-colors flex items-center gap-1">View full timeline</Link>
             </CardHeader>
             <CardContent>
               {recentEvents.length === 0 ? (
@@ -119,7 +119,7 @@ export default function ProjectDetailPage({ params }: { params: Promise<{ id: st
                 <div className="space-y-4">
                   {recentEvents.map((event) => (
                     <div key={event.id} className="flex items-start gap-3">
-                      <div className="mt-1 h-2 w-2 rounded-full bg-primary shrink-0" />
+                      <div className="mt-1 h-2 w-2 rounded-full bg-primary shrink-0 animate-pulse-glow" />
                       <div className="flex-1 min-w-0">
                         <p className="text-sm text-text">{event.title}</p>
                         <p className="text-xs text-text-muted">{new Date(event.createdAt).toLocaleString()}</p>
@@ -137,8 +137,8 @@ export default function ProjectDetailPage({ params }: { params: Promise<{ id: st
           </Card>
         </div>
 
-        <div className="space-y-6">
-          <Card>
+        <div className="space-y-6 stagger-children">
+          <Card className="glow-card">
             <CardHeader><CardTitle>Team</CardTitle></CardHeader>
             <CardContent className="space-y-3">
               {(project.memberships ?? []).length === 0 ? (
@@ -146,7 +146,7 @@ export default function ProjectDetailPage({ params }: { params: Promise<{ id: st
               ) : (
                 project.memberships!.map((member) => (
                   <div key={member.user.name} className="flex items-center gap-3">
-                    <div className="h-8 w-8 rounded-full bg-primary-light flex items-center justify-center text-xs font-medium text-primary">
+                    <div className="h-8 w-8 rounded-full bg-primary-light flex items-center justify-center text-xs font-medium text-primary transition-transform duration-200 hover:scale-110">
                       {member.user.name.split(" ").map((n: string) => n[0]).join("")}
                     </div>
                     <div>
@@ -159,7 +159,7 @@ export default function ProjectDetailPage({ params }: { params: Promise<{ id: st
             </CardContent>
           </Card>
 
-          <Card>
+          <Card className="glow-card">
             <CardHeader>
               <CardTitle className="flex items-center gap-2"><AlertTriangle className="h-4 w-4 text-warning" />Risks</CardTitle>
             </CardHeader>
@@ -180,7 +180,7 @@ export default function ProjectDetailPage({ params }: { params: Promise<{ id: st
             </CardContent>
           </Card>
 
-          <Card>
+          <Card className="glow-card">
             <CardHeader>
               <CardTitle className="flex items-center gap-2"><CheckCircle2 className="h-4 w-4 text-info" />Pending Approvals</CardTitle>
             </CardHeader>

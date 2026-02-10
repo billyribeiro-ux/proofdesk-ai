@@ -34,7 +34,7 @@ export default function BillingPage() {
 
   return (
     <div className="space-y-6">
-      <div className="flex items-center justify-between">
+      <div className="flex items-center justify-between animate-fade-in-up">
         <div>
           <h1 className="text-2xl font-bold text-text">Billing</h1>
           <p className="text-sm text-text-muted mt-1">Manage your subscription and billing packets</p>
@@ -46,7 +46,7 @@ export default function BillingPage() {
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        <Card className="lg:col-span-1">
+        <Card className="lg:col-span-1 glow-card animate-fade-in-up" style={{ animationDelay: "100ms" }}>
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
               <CreditCard className="h-5 w-5 text-primary" />
@@ -61,7 +61,7 @@ export default function BillingPage() {
               </div>
               <Badge variant="success">ACTIVE</Badge>
             </div>
-            <div className="space-y-2">
+            <div className="space-y-2 stagger-fast">
               {PLAN_FEATURES.map((f) => (
                 <div key={f} className="flex items-center gap-2 text-sm text-text-muted">
                   <CheckCircle2 className="h-4 w-4 text-success shrink-0" />
@@ -77,8 +77,8 @@ export default function BillingPage() {
           </CardFooter>
         </Card>
 
-        <Card padding="none" className="lg:col-span-2">
-          <CardHeader className="px-6 pt-6">
+        <Card padding="none" className="lg:col-span-2 glow-card animate-fade-in-up" style={{ animationDelay: "200ms" }}>
+          <CardHeader row className="px-6 pt-6">
             <CardTitle className="flex items-center gap-2">
               <Package className="h-5 w-5 text-primary" />
               Billing Packets
@@ -97,7 +97,7 @@ export default function BillingPage() {
             ) : (
               <div className="divide-y divide-border">
                 {packets.map((packet) => (
-                  <div key={packet.id} className="flex items-center justify-between px-6 py-4">
+                  <div key={packet.id} className="flex items-center justify-between px-6 py-4 transition-colors duration-150 hover:bg-bg-subtle/50">
                     <div className="min-w-0 flex-1">
                       <p className="text-sm font-medium text-text">{packet.title}</p>
                       <div className="flex items-center gap-3 mt-1">

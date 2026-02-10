@@ -95,7 +95,7 @@ export default function ProjectsPage() {
 
   return (
     <div className="space-y-6">
-      <div className="flex items-center justify-between">
+      <div className="flex items-center justify-between animate-fade-in-up">
         <div>
           <h1 className="text-2xl font-bold text-text">Projects</h1>
           <p className="text-sm text-text-muted mt-1">Track and manage all project deliverables</p>
@@ -106,8 +106,8 @@ export default function ProjectsPage() {
         </Button>
       </div>
 
-      <Card padding="none">
-        <div className="flex items-center gap-3 p-4 border-b border-border flex-wrap">
+      <Card padding="none" className="glow-card animate-fade-in-up" style={{ animationDelay: "100ms" }}>
+        <div className="flex items-center gap-3 p-4 border-b border-border/60 flex-wrap">
           <div className="relative flex-1 min-w-[200px] max-w-sm">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-text-muted" />
             <Input placeholder="Search projects..." value={search} onChange={(e) => setSearch(e.target.value)} className="pl-9" aria-label="Search projects" />

@@ -60,7 +60,7 @@ export default function EvidencePage() {
 
   return (
     <div className="space-y-6">
-      <div className="flex items-center justify-between">
+      <div className="flex items-center justify-between animate-fade-in-up">
         <div>
           <h1 className="text-2xl font-bold text-text">Evidence Library</h1>
           <p className="text-sm text-text-muted mt-1">Artifacts and provenance for all project work</p>
@@ -91,13 +91,13 @@ export default function EvidencePage() {
       ) : evidence.length === 0 ? (
         <EmptyState icon={<FileCheck className="h-6 w-6" />} title="No evidence found" description={search ? "No evidence matches your search." : "Upload or link evidence artifacts to build your proof library."} />
       ) : (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 stagger-children">
           {evidence.map((item) => {
             const Icon = typeIcons[item.type] ?? File;
             return (
-              <Card key={item.id} padding="md" className="hover:shadow-[var(--shadow-md)] transition-shadow group">
+              <Card key={item.id} padding="md" className="glow-card transition-all duration-300 hover:-translate-y-1 group">
                 <div className="flex items-start gap-3">
-                  <div className="h-10 w-10 rounded-[var(--radius-lg)] bg-bg-subtle flex items-center justify-center shrink-0">
+                  <div className="h-10 w-10 rounded-[var(--radius-lg)] bg-bg-subtle flex items-center justify-center shrink-0 transition-all duration-300 group-hover:bg-primary/10 group-hover:scale-110">
                     <Icon className="h-5 w-5 text-text-muted" aria-hidden="true" />
                   </div>
                   <div className="min-w-0 flex-1">

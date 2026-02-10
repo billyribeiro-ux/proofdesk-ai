@@ -36,7 +36,7 @@ export default function NewClientPage() {
 
   return (
     <div className="max-w-2xl mx-auto space-y-6">
-      <div className="flex items-center gap-3">
+      <div className="flex items-center gap-3 animate-fade-in-up">
         <Link
           href={ROUTES.CLIENTS}
           className="rounded-[var(--radius-md)] p-1.5 text-text-muted hover:bg-bg-subtle hover:text-text transition-colors"
@@ -50,7 +50,7 @@ export default function NewClientPage() {
         </div>
       </div>
 
-      <Card>
+      <Card className="glow-card animate-fade-in-up" style={{ animationDelay: "100ms" }}>
         <form onSubmit={handleSubmit(onSubmit)}>
           <CardHeader>
             <CardTitle>Client Details</CardTitle>
