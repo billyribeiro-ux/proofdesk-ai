@@ -1,0 +1,620 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+// ─── ENUMS ───────────────────────────────────────────────────
+
+enum MemberRole {
+  OWNER
+  ADMIN
+  MANAGER
+  CLIENT_VIEWER
+}
+
+enum ProjectStatus {
+  DRAFT
+  ACTIVE
+  ON_HOLD
+  COMPLETED
+  ARCHIVED
+}
+
+enum RiskSeverity {
+  LOW
+  MEDIUM
+  HIGH
+  CRITICAL
+}
+
+enum RiskCategory {
+  SCOPE_CREEP
+  DELIVERY_DELAY
+  BLOCKER
+  BUDGET_OVERRUN
+  QUALITY
+  DEPENDENCY
+}
+
+enum ApprovalStatus {
+  PENDING
+  APPROVED
+  REJECTED
+  CHANGES_REQUESTED
+}
+
+enum BillingPacketStatus {
+  DRAFT
+  GENERATED
+  SENT
+  ACKNOWLEDGED
+}
+
+enum NotificationType {
+  APPROVAL_REQUESTED
+  APPROVAL_DECIDED
+  RISK_FLAGGED
+  RISK_RESOLVED
+  REPORT_GENERATED
+  BILLING_PACKET_READY
+  INVITATION_RECEIVED
+  PROJECT_STATUS_CHANGED
+  COMMENT_ADDED
+}
+
+enum SubscriptionStatus {
+  TRIALING
+  ACTIVE
+  PAST_DUE
+  CANCELED
+  UNPAID
+}
+
+enum PlanTier {
+  FREE
+  STARTER
+  PRO
+  ENTERPRISE
+}
+
+enum DemoScenarioType {
+  HAPPY_PATH
+  SCOPE_CREEP
+  DELAYED_DEPENDENCY
+  REJECTED_APPROVAL
+  FULL_LIFECYCLE
+}
+
+// ─── ORGANIZATION ────────────────────────────────────────────
+
+model Organization {
+  id        String   @id @default(cuid())
+  name      String
+  slug      String   @unique
+  logoUrl   String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  memberships    Membership[]
+  clients        Client[]
+  projects       Project[]
+  workEvents     WorkEvent[]
+  evidences      EvidenceArtifact[]
+  aiReports      AIReport[]
+  riskFlags      RiskFlag[]
+  approvals      ApprovalRequest[]
+  billingPackets BillingPacket[]
+  notifications  Notification[]
+  activityLogs   ActivityLog[]
+  subscriptions  Subscription[]
+  demoRuns       DemoRun[]
+
+  @@index([slug])
+}
+
+// ─── USER + AUTH ─────────────────────────────────────────────
+
+model User {
+  id            String    @id @default(cuid())
+  name          String?
+  email         String    @unique
+  emailVerified DateTime?
+  image         String?
+  passwordHash  String?
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  accounts      Account[]
+  sessions      Session[]
+  memberships   Membership[]
+  assignedProjects ProjectAssignment[]
+  approvalDecisions ApprovalDecision[]
+  notifications    Notification[]
+  activityLogs     ActivityLog[]
+
+  @@index([email])
+}
+
+model Account {
+  id                String  @id @default(cuid())
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String? @db.Text
+  access_token      String? @db.Text
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String? @db.Text
+  session_state     String?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+  @@index([userId])
+}
+
+model Session {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+}
+
+model VerificationToken {
+  identifier String
+  token      String   @unique
+  expires    DateTime
+
+  @@unique([identifier, token])
+}
+
+// ─── MEMBERSHIP + INVITATIONS ────────────────────────────────
+
+model Membership {
+  id             String     @id @default(cuid())
+  userId         String
+  organizationId String
+  role           MemberRole @default(MANAGER)
+  createdAt      DateTime   @default(now())
+  updatedAt      DateTime   @updatedAt
+
+  user         User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  organization Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, organizationId])
+  @@index([organizationId])
+  @@index([userId])
+}
+
+model Invitation {
+  id             String     @id @default(cuid())
+  email          String
+  organizationId String
+  role           MemberRole @default(MANAGER)
+  token          String     @unique @default(cuid())
+  expiresAt      DateTime
+  acceptedAt     DateTime?
+  createdAt      DateTime   @default(now())
+
+  @@index([organizationId])
+  @@index([token])
+  @@index([email])
+}
+
+// ─── CLIENTS ─────────────────────────────────────────────────
+
+model Client {
+  id             String   @id @default(cuid())
+  organizationId String
+  name           String
+  contactName    String?
+  contactEmail   String?
+  industry       String?
+  notes          String?  @db.Text
+  archived       Boolean  @default(false)
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  organization Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  projects     Project[]
+
+  @@index([organizationId])
+  @@index([organizationId, archived])
+}
+
+// ─── PROJECTS ────────────────────────────────────────────────
+
+model Project {
+  id             String        @id @default(cuid())
+  organizationId String
+  clientId       String
+  name           String
+  description    String?       @db.Text
+  status         ProjectStatus @default(DRAFT)
+  startDate      DateTime?
+  dueDate        DateTime?
+  slaHours       Int?
+  budget         Float?
+  createdAt      DateTime      @default(now())
+  updatedAt      DateTime      @updatedAt
+
+  organization   Organization        @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  client         Client              @relation(fields: [clientId], references: [id], onDelete: Cascade)
+  assignments    ProjectAssignment[]
+  stageHistory   ProjectStageHistory[]
+  workEvents     WorkEvent[]
+  evidences      EvidenceArtifact[]
+  aiReports      AIReport[]
+  riskFlags      RiskFlag[]
+  approvals      ApprovalRequest[]
+  billingPackets BillingPacket[]
+
+  @@index([organizationId])
+  @@index([organizationId, status])
+  @@index([clientId])
+}
+
+model ProjectAssignment {
+  id        String   @id @default(cuid())
+  projectId String
+  userId    String
+  role      String   @default("contributor")
+  createdAt DateTime @default(now())
+
+  project Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  user    User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([projectId, userId])
+  @@index([userId])
+}
+
+model ProjectStageHistory {
+  id        String        @id @default(cuid())
+  projectId String
+  fromStatus ProjectStatus?
+  toStatus  ProjectStatus
+  changedBy String?
+  reason    String?
+  createdAt DateTime      @default(now())
+
+  project Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
+
+  @@index([projectId])
+  @@index([createdAt])
+}
+
+// ─── WORK TIMELINE ───────────────────────────────────────────
+
+model WorkEvent {
+  id             String   @id @default(cuid())
+  organizationId String
+  projectId      String
+  source         String
+  sourceId       String?
+  eventType      String
+  title          String
+  description    String?  @db.Text
+  metadata       Json?
+  occurredAt     DateTime
+  ingestedAt     DateTime @default(now())
+
+  organization Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  project      Project      @relation(fields: [projectId], references: [id], onDelete: Cascade)
+
+  @@index([organizationId])
+  @@index([projectId])
+  @@index([occurredAt])
+  @@index([organizationId, projectId, occurredAt])
+}
+
+// ─── EVIDENCE ARTIFACTS ──────────────────────────────────────
+
+model EvidenceArtifact {
+  id             String   @id @default(cuid())
+  organizationId String
+  projectId      String
+  type           String
+  title          String
+  description    String?  @db.Text
+  url            String?
+  fileKey        String?
+  mimeType       String?
+  sizeBytes      Int?
+  hash           String?
+  uploadedBy     String?
+  metadata       Json?
+  createdAt      DateTime @default(now())
+
+  organization Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  project      Project      @relation(fields: [projectId], references: [id], onDelete: Cascade)
+
+  @@index([organizationId])
+  @@index([projectId])
+  @@index([organizationId, projectId])
+}
+
+// ─── AI REPORTS ──────────────────────────────────────────────
+
+model AIReport {
+  id             String   @id @default(cuid())
+  organizationId String
+  projectId      String
+  variant        String   @default("standard")
+  title          String
+  summary        String   @db.Text
+  highlights     Json?
+  generatedBy    String?
+  model          String?
+  promptVersion  String?
+  createdAt      DateTime @default(now())
+
+  organization Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  project      Project      @relation(fields: [projectId], references: [id], onDelete: Cascade)
+
+  @@index([organizationId])
+  @@index([projectId])
+  @@index([organizationId, projectId])
+}
+
+// ─── RISK FLAGS ──────────────────────────────────────────────
+
+model RiskFlag {
+  id             String       @id @default(cuid())
+  organizationId String
+  projectId      String
+  category       RiskCategory
+  severity       RiskSeverity
+  title          String
+  description    String?      @db.Text
+  resolved       Boolean      @default(false)
+  resolvedAt     DateTime?
+  resolvedBy     String?
+  detectedAt     DateTime     @default(now())
+  metadata       Json?
+
+  organization Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  project      Project      @relation(fields: [projectId], references: [id], onDelete: Cascade)
+
+  @@index([organizationId])
+  @@index([projectId])
+  @@index([organizationId, resolved])
+  @@index([organizationId, projectId, resolved])
+}
+
+// ─── APPROVALS ───────────────────────────────────────────────
+
+model ApprovalRequest {
+  id             String         @id @default(cuid())
+  organizationId String
+  projectId      String
+  title          String
+  description    String?        @db.Text
+  status         ApprovalStatus @default(PENDING)
+  requestedBy    String
+  dueDate        DateTime?
+  metadata       Json?
+  createdAt      DateTime       @default(now())
+  updatedAt      DateTime       @updatedAt
+
+  organization Organization       @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  project      Project            @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  decisions    ApprovalDecision[]
+
+  @@index([organizationId])
+  @@index([projectId])
+  @@index([organizationId, status])
+}
+
+model ApprovalDecision {
+  id                String         @id @default(cuid())
+  approvalRequestId String
+  decidedBy         String
+  decision          ApprovalStatus
+  comment           String?        @db.Text
+  createdAt         DateTime       @default(now())
+
+  approvalRequest ApprovalRequest @relation(fields: [approvalRequestId], references: [id], onDelete: Cascade)
+  user            User            @relation(fields: [decidedBy], references: [id], onDelete: Cascade)
+
+  @@index([approvalRequestId])
+  @@index([decidedBy])
+}
+
+// ─── BILLING PACKETS ─────────────────────────────────────────
+
+model BillingPacket {
+  id             String              @id @default(cuid())
+  organizationId String
+  projectId      String
+  status         BillingPacketStatus @default(DRAFT)
+  title          String
+  periodStart    DateTime
+  periodEnd      DateTime
+  totalHours     Float?
+  totalAmount    Float?
+  lineItems      Json?
+  evidenceIds    String[]
+  generatedBy    String?
+  sentAt         DateTime?
+  acknowledgedAt DateTime?
+  createdAt      DateTime            @default(now())
+  updatedAt      DateTime            @updatedAt
+
+  organization Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  project      Project      @relation(fields: [projectId], references: [id], onDelete: Cascade)
+
+  @@index([organizationId])
+  @@index([projectId])
+  @@index([organizationId, status])
+}
+
+// ─── NOTIFICATIONS ───────────────────────────────────────────
+
+model Notification {
+  id             String           @id @default(cuid())
+  organizationId String
+  userId         String
+  type           NotificationType
+  title          String
+  body           String?          @db.Text
+  href           String?
+  read           Boolean          @default(false)
+  emailSent      Boolean          @default(false)
+  createdAt      DateTime         @default(now())
+
+  organization Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  user         User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, read])
+  @@index([organizationId])
+  @@index([userId, organizationId])
+}
+
+// ─── ACTIVITY LOG (IMMUTABLE AUDIT) ──────────────────────────
+
+model ActivityLog {
+  id             String   @id @default(cuid())
+  organizationId String
+  userId         String?
+  action         String
+  entity         String
+  entityId       String?
+  metadata       Json?
+  ipAddress      String?
+  userAgent      String?
+  createdAt      DateTime @default(now())
+
+  organization Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  user         User?        @relation(fields: [userId], references: [id], onDelete: SetNull)
+
+  @@index([organizationId])
+  @@index([organizationId, entity])
+  @@index([organizationId, createdAt])
+  @@index([userId])
+}
+
+// ─── ONBOARDING ──────────────────────────────────────────────
+
+model OnboardingDraft {
+  id             String   @id @default(cuid())
+  organizationId String?
+  userId         String
+  step           Int      @default(0)
+  data           Json?
+  completed      Boolean  @default(false)
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  @@index([userId])
+}
+
+// ─── SUBSCRIPTION (STRIPE) ──────────────────────────────────
+
+model Subscription {
+  id                   String             @id @default(cuid())
+  organizationId       String
+  stripeCustomerId     String?
+  stripeSubscriptionId String?            @unique
+  stripePriceId        String?
+  plan                 PlanTier           @default(FREE)
+  status               SubscriptionStatus @default(TRIALING)
+  currentPeriodStart   DateTime?
+  currentPeriodEnd     DateTime?
+  cancelAtPeriodEnd    Boolean            @default(false)
+  createdAt            DateTime           @default(now())
+  updatedAt            DateTime           @updatedAt
+
+  organization Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+
+  @@index([organizationId])
+  @@index([stripeCustomerId])
+  @@index([stripeSubscriptionId])
+}
+
+// ─── DEMO SIMULATOR ─────────────────────────────────────────
+
+model DemoScenario {
+  id          String           @id @default(cuid())
+  name        String
+  type        DemoScenarioType
+  description String?          @db.Text
+  steps       Json
+  createdAt   DateTime         @default(now())
+
+  runs DemoRun[]
+}
+
+model DemoRun {
+  id             String   @id @default(cuid())
+  organizationId String
+  scenarioId     String
+  currentStep    Int      @default(0)
+  completed      Boolean  @default(false)
+  startedAt      DateTime @default(now())
+  completedAt    DateTime?
+
+  organization Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  scenario     DemoScenario @relation(fields: [scenarioId], references: [id], onDelete: Cascade)
+  events       DemoEvent[]
+
+  @@index([organizationId])
+  @@index([scenarioId])
+}
+
+model DemoEvent {
+  id        String   @id @default(cuid())
+  runId     String
+  step      Int
+  action    String
+  payload   Json?
+  createdAt DateTime @default(now())
+
+  run DemoRun @relation(fields: [runId], references: [id], onDelete: Cascade)
+
+  @@index([runId])
+}
+
+// ─── IDEMPOTENCY RECORDS ────────────────────────────────────
+
+model IdempotencyRecord {
+  id             String   @id @default(cuid())
+  key            String
+  organizationId String
+  fingerprint    String
+  statusCode     Int
+  responseBody   Json?
+  createdAt      DateTime @default(now())
+  expiresAt      DateTime
+
+  @@unique([organizationId, key])
+  @@index([expiresAt])
+}
+
+// ─── BACKGROUND JOBS ────────────────────────────────────────
+
+model BackgroundJob {
+  id           String   @id @default(cuid())
+  type         String
+  payload      Json
+  status       String   @default("pending")
+  attempts     Int      @default(0)
+  maxAttempts  Int      @default(5)
+  lastError    String?  @db.Text
+  scheduledAt  DateTime @default(now())
+  startedAt    DateTime?
+  completedAt  DateTime?
+  createdAt    DateTime @default(now())
+
+  @@index([status])
+  @@index([type, status])
+  @@index([scheduledAt])
+}
