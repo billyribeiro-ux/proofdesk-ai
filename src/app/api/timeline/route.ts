@@ -4,11 +4,14 @@ import { requireSession } from "@/lib/auth/session";
 import { apiErrorResponse } from "@/lib/api/error";
 import { scopeWhere } from "@/lib/security/tenant";
 import { assertPermission } from "@/lib/security/rbac";
+import { IS_DEMO } from "@/lib/constants/app";
 
 export async function GET(req: NextRequest) {
   try {
     const { orgId, orgRole } = await requireSession();
     assertPermission(orgRole, "timeline:read");
+
+    if (IS_DEMO) return NextResponse.json({ data: [], total: 0, limit: 50, offset: 0 });
 
     const { searchParams } = new URL(req.url);
     const projectId = searchParams.get("projectId");

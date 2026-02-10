@@ -5,6 +5,7 @@ import { requireSession } from "@/lib/auth/session";
 import { apiErrorResponse } from "@/lib/api/error";
 import { scopeWhere } from "@/lib/security/tenant";
 import { assertPermission } from "@/lib/security/rbac";
+import { IS_DEMO } from "@/lib/constants/app";
 
 const markReadSchema = z.object({
   notificationIds: z.array(z.string().min(1)).max(100).optional(),
@@ -14,6 +15,8 @@ export async function GET() {
   try {
     const { userId, orgId, orgRole } = await requireSession();
     assertPermission(orgRole, "notification:read");
+
+    if (IS_DEMO) return NextResponse.json({ data: [], unreadCount: 0 });
 
     const notifications = await db.notification.findMany({
       where: { ...scopeWhere(orgId), userId },

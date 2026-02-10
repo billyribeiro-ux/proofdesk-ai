@@ -3,6 +3,7 @@ import { z } from "zod";
 import { requireSession } from "@/lib/auth/session";
 import { apiErrorResponse } from "@/lib/api/error";
 import { getSearchAdapter } from "@/lib/search";
+import { IS_DEMO } from "@/lib/constants/app";
 
 const VALID_ENTITY_TYPES = ["client", "project", "evidence", "work_event"] as const;
 type ValidEntityType = (typeof VALID_ENTITY_TYPES)[number];
@@ -21,6 +22,8 @@ const searchParamsSchema = z.object({
 export async function GET(req: NextRequest) {
   try {
     const { orgId } = await requireSession();
+
+    if (IS_DEMO) return NextResponse.json({ results: [], total: 0, page: 1, pageSize: 20 });
 
     const { searchParams } = new URL(req.url);
     const params = searchParamsSchema.parse({

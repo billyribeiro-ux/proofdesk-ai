@@ -1,5 +1,6 @@
 import { auth } from "@/lib/auth/config";
 import { ApiError } from "@/lib/api/error";
+import { IS_DEMO, DEMO_TENANT_ID } from "@/lib/constants/app";
 import type { Role } from "@/lib/constants/app";
 
 export interface SessionData {
@@ -11,6 +12,16 @@ export interface SessionData {
 }
 
 export async function requireSession(): Promise<SessionData> {
+  if (IS_DEMO) {
+    return {
+      userId: "demo-user-001",
+      orgId: DEMO_TENANT_ID,
+      orgRole: "OWNER",
+      orgName: "Demo Agency",
+      orgSlug: "demo-agency",
+    };
+  }
+
   const session = await auth();
   if (!session?.user?.id) throw ApiError.unauthorized();
 

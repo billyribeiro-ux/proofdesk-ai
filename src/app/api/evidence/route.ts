@@ -8,11 +8,14 @@ import { assertPermission } from "@/lib/security/rbac";
 import { logAudit, getClientIp, getUserAgent } from "@/lib/security/audit";
 import { checkRateLimit } from "@/lib/security/rate-limit";
 import { checkIdempotency, storeIdempotentResponse } from "@/lib/api/idempotency";
+import { IS_DEMO } from "@/lib/constants/app";
 
 export async function GET(req: NextRequest) {
   try {
     const { orgId, orgRole } = await requireSession();
     assertPermission(orgRole, "evidence:read");
+
+    if (IS_DEMO) return NextResponse.json({ data: [] });
 
     const { searchParams } = new URL(req.url);
     const projectId = searchParams.get("projectId");

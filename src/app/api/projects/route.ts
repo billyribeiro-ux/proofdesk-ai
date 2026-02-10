@@ -7,11 +7,14 @@ import { scopeWhere } from "@/lib/security/tenant";
 import { logAudit, getClientIp, getUserAgent } from "@/lib/security/audit";
 import { checkRateLimit } from "@/lib/security/rate-limit";
 import { assertPermission } from "@/lib/security/rbac";
+import { IS_DEMO } from "@/lib/constants/app";
 
 export async function GET() {
   try {
     const { orgId, orgRole } = await requireSession();
     assertPermission(orgRole, "project:read");
+
+    if (IS_DEMO) return NextResponse.json({ data: [] });
 
     const projects = await db.project.findMany({
       where: scopeWhere(orgId),
