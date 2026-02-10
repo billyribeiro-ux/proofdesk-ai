@@ -5,7 +5,7 @@ import { db } from "@/lib/db";
 import { IS_DEMO, DEMO_TENANT_ID } from "@/lib/constants/app";
 
 export const { handlers, auth, signIn, signOut } = NextAuth({
-  adapter: PrismaAdapter(db) as ReturnType<typeof PrismaAdapter>,
+  adapter: IS_DEMO ? undefined : (PrismaAdapter(db) as ReturnType<typeof PrismaAdapter>),
   session: { strategy: "jwt" },
   pages: {
     signIn: "/auth/signin",
