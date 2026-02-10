@@ -4,7 +4,6 @@ import { requireSession } from "@/lib/auth/session";
 import { createProjectSchema } from "@/lib/validation/schemas";
 import { apiErrorResponse } from "@/lib/api/error";
 import { scopeWhere } from "@/lib/security/tenant";
-import { hasPermission } from "@/lib/security/rbac";
 import { logAudit, getClientIp, getUserAgent } from "@/lib/security/audit";
 import { checkRateLimit } from "@/lib/security/rate-limit";
 import { assertPermission } from "@/lib/security/rbac";

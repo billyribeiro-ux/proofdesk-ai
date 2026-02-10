@@ -1,4 +1,5 @@
 import { ROLE_HIERARCHY, type Role } from "@/lib/constants/app";
+import { ApiError } from "@/lib/api/error";
 
 export type Permission =
   | "org:manage"
@@ -143,7 +144,7 @@ export function hasMinRole(userRole: Role, requiredRole: Role): boolean {
 
 export function assertPermission(role: Role, permission: Permission): void {
   if (!hasPermission(role, permission)) {
-    throw new Error(
+    throw ApiError.forbidden(
       `Role "${role}" does not have permission "${permission}"`
     );
   }

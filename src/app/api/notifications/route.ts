@@ -1,9 +1,14 @@
 import { NextRequest, NextResponse } from "next/server";
+import { z } from "zod";
 import { db } from "@/lib/db";
 import { requireSession } from "@/lib/auth/session";
 import { apiErrorResponse } from "@/lib/api/error";
 import { scopeWhere } from "@/lib/security/tenant";
 import { assertPermission } from "@/lib/security/rbac";
+
+const markReadSchema = z.object({
+  notificationIds: z.array(z.string().min(1)).max(100).optional(),
+});
 
 export async function GET() {
   try {
@@ -31,7 +36,7 @@ export async function PATCH(req: NextRequest) {
     const { userId, orgId } = await requireSession();
 
     const body = await req.json();
-    const { notificationIds } = body as { notificationIds?: string[] };
+    const { notificationIds } = markReadSchema.parse(body);
 
     if (notificationIds?.length) {
       await db.notification.updateMany({
