@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Play, Pause, SkipForward, RotateCcw, Zap, AlertTriangle, XCircle, CheckCircle2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -42,6 +42,28 @@ export default function DemoPage() {
   const activeScenario = scenarios.find((s) => s.id === demo.scenarioId);
   const steps = demo.scenarioId ? stepDescriptions[demo.scenarioId] ?? [] : [];
 
+  // Auto-advance playback
+  const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
+  useEffect(() => {
+    if (timerRef.current) clearInterval(timerRef.current);
+    if (demo.isPlaying && demo.currentStep < demo.totalSteps - 1) {
+      const ms = 2000 / demo.speed;
+      timerRef.current = setInterval(() => {
+        dispatch(nextStep());
+      }, ms);
+    }
+    return () => {
+      if (timerRef.current) clearInterval(timerRef.current);
+    };
+  }, [demo.isPlaying, demo.speed, demo.currentStep, demo.totalSteps, dispatch]);
+
+  // Pause when reaching the last step
+  useEffect(() => {
+    if (demo.isPlaying && demo.currentStep >= demo.totalSteps - 1) {
+      dispatch(pause());
+    }
+  }, [demo.currentStep, demo.totalSteps, demo.isPlaying, dispatch]);
+
   const handleStart = (scenario: Scenario) => {
     dispatch(startDemo({ scenarioId: scenario.id, runId: `run-${Date.now()}`, totalSteps: scenario.steps }));
     setSelectedScenario(scenario.id);
@@ -80,13 +102,13 @@ export default function DemoPage() {
                   onClick={() => setSelectedScenario(scenario.id)}
                 >
                   <div className="flex items-start gap-3">
-                    <div className={`h-10 w-10 rounded-[var(--radius-lg)] bg-bg-subtle flex items-center justify-center transition-transform duration-300 group-hover:scale-110 ${scenario.color}`}>
+                    <div className={`h-10 w-10 shrink-0 rounded-[var(--radius-lg)] bg-bg-subtle flex items-center justify-center transition-transform duration-300 group-hover:scale-110 ${scenario.color}`}>
                       <Icon className="h-5 w-5" aria-hidden="true" />
                     </div>
                     <div className="flex-1 min-w-0">
-                      <h3 className="text-sm font-semibold text-text">{scenario.name}</h3>
-                      <p className="text-xs text-text-muted mt-0.5">{scenario.description}</p>
-                      <div className="flex items-center gap-2 mt-2">
+                      <h3 className="text-sm font-semibold text-text truncate">{scenario.name}</h3>
+                      <p className="text-xs text-text-muted mt-0.5 line-clamp-3">{scenario.description}</p>
+                      <div className="flex flex-wrap items-center gap-2 mt-2">
                         <Badge variant="default">{scenario.steps} steps</Badge>
                         <Badge variant="outline">{scenario.type.replace(/_/g, " ")}</Badge>
                       </div>
