@@ -18,12 +18,12 @@ export function ErrorState({
   return (
     <div
       className={cn(
-        "flex flex-col items-center justify-center py-16 gap-4 text-center",
+        "flex flex-col items-center justify-center py-16 gap-4 text-center animate-fade-in-up",
         className
       )}
       role="alert"
     >
-      <div className="h-14 w-14 rounded-full bg-danger-light flex items-center justify-center">
+      <div className="h-14 w-14 rounded-full bg-danger-light flex items-center justify-center animate-pulse-glow">
         <AlertTriangle className="h-7 w-7 text-danger" />
       </div>
       <div className="space-y-1">

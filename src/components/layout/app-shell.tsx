@@ -17,14 +17,14 @@ export function AppShell({ children }: { children: ReactNode }) {
       <Sidebar />
       <div
         className={cn(
-          "transition-[margin-left] duration-200 ease-in-out",
+          "transition-[margin-left] duration-300 ease-[cubic-bezier(0.16,1,0.3,1)]",
           sidebarOpen
             ? "ml-[var(--sidebar-width)]"
             : "ml-[var(--sidebar-collapsed-width)]"
         )}
       >
         <Header />
-        <main id="main-content" className="p-4 sm:p-6 lg:p-8" tabIndex={-1}>
+        <main id="main-content" className="p-4 sm:p-6 lg:p-8 animate-fade-in" tabIndex={-1}>
           {children}
         </main>
       </div>

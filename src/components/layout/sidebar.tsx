@@ -61,7 +61,7 @@ export function Sidebar() {
   return (
     <aside
       className={cn(
-        "fixed left-0 top-0 z-40 h-screen border-r border-border bg-bg-elevated transition-[width] duration-200 ease-in-out",
+        "fixed left-0 top-0 z-40 h-screen border-r border-border/60 bg-bg-elevated transition-[width] duration-300 ease-[cubic-bezier(0.16,1,0.3,1)]",
         sidebarOpen ? "w-[var(--sidebar-width)]" : "w-[var(--sidebar-collapsed-width)]"
       )}
       aria-label="Main navigation"
@@ -69,15 +69,15 @@ export function Sidebar() {
       <div className="flex h-[var(--header-height)] items-center justify-between border-b border-border px-4">
         {sidebarOpen && (
           <Link href={ROUTES.DASHBOARD} className="flex items-center gap-2">
-            <div className="h-8 w-8 rounded-[var(--radius-lg)] bg-primary flex items-center justify-center">
-              <span className="text-sm font-bold text-primary-foreground">P</span>
+            <div className="h-8 w-8 rounded-[var(--radius-lg)] bg-gradient-to-br from-primary to-secondary flex items-center justify-center shadow-[var(--shadow-sm)]">
+              <span className="text-sm font-bold text-white">P</span>
             </div>
             <span className="text-base font-semibold text-text">ProofDesk</span>
           </Link>
         )}
         <button
           onClick={toggleSidebar}
-          className="rounded-[var(--radius-md)] p-1.5 text-text-muted hover:bg-bg-subtle hover:text-text transition-colors"
+          className="rounded-[var(--radius-md)] p-1.5 text-text-muted hover:bg-bg-subtle hover:text-text transition-all duration-200 hover:scale-110"
           aria-label={sidebarOpen ? "Collapse sidebar" : "Expand sidebar"}
         >
           {sidebarOpen ? (

@@ -65,12 +65,12 @@ export function DataTable<T>({
     <div className={cn("overflow-x-auto", className)}>
       <table className="w-full text-sm" role="grid">
         <thead>
-          <tr className="border-b border-border">
+          <tr className="border-b border-border/60">
             {columns.map((col) => (
               <th
                 key={col.key}
                 className={cn(
-                  "px-4 py-3 text-left font-medium text-text-muted whitespace-nowrap",
+                  "px-4 py-3 text-left text-[11px] font-semibold uppercase tracking-wider text-text-muted/60 whitespace-nowrap",
                   col.className
                 )}
                 scope="col"
@@ -89,8 +89,8 @@ export function DataTable<T>({
               <tr
                 key={id}
                 className={cn(
-                  "border-b border-border transition-colors",
-                  onRowClick && "cursor-pointer hover:bg-bg-subtle",
+                  "border-b border-border/40 transition-all duration-150",
+                  onRowClick && "cursor-pointer hover:bg-bg-subtle/70",
                   isSelected && "bg-primary-light",
                   isFocused && "ring-2 ring-inset ring-border-focus"
                 )}
@@ -99,8 +99,8 @@ export function DataTable<T>({
                 onKeyDown={(e) => {
                   if (e.key === "Enter" && onRowClick) onRowClick(row);
                 }}
-                role={onRowClick ? "row" : undefined}
-                aria-selected={isSelected || undefined}
+                role="row"
+                aria-selected={isSelected ? "true" : undefined}
               >
                 {columns.map((col) => (
                   <td

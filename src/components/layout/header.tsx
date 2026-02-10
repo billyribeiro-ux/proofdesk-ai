@@ -67,14 +67,14 @@ export function Header() {
           aria-label="Open notifications"
         >
           <Bell className="h-4 w-4" aria-hidden="true" />
-          <span className="absolute top-1.5 right-1.5 h-1.5 w-1.5 rounded-full bg-danger ring-2 ring-bg-elevated" aria-hidden="true" />
+          <span className="absolute top-1.5 right-1.5 h-1.5 w-1.5 rounded-full bg-danger ring-2 ring-bg-elevated animate-pulse" aria-hidden="true" />
         </button>
 
         <div className="mx-1 h-5 w-px bg-border/50" />
 
         {user && (
-          <button className="flex items-center gap-2.5 rounded-[var(--radius-lg)] px-2 py-1.5 transition-all duration-150 hover:bg-bg-subtle">
-            <div className="h-7 w-7 rounded-full bg-gradient-to-br from-primary to-secondary flex items-center justify-center text-xs font-semibold text-white shadow-[var(--shadow-sm)]">
+          <button className="group flex items-center gap-2.5 rounded-[var(--radius-lg)] px-2 py-1.5 transition-all duration-150 hover:bg-bg-subtle">
+            <div className="h-7 w-7 rounded-full bg-gradient-to-br from-primary to-secondary flex items-center justify-center text-xs font-semibold text-white shadow-[var(--shadow-sm)] ring-2 ring-transparent transition-all duration-200 group-hover:ring-primary/20">
               {user.name?.[0]?.toUpperCase() ?? user.email[0].toUpperCase()}
             </div>
             <div className="hidden sm:block text-left">
