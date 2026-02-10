@@ -22,17 +22,35 @@ import { useUI } from "@/context/ui-context";
 import { useAuth } from "@/context/auth-context";
 import { ROUTES } from "@/lib/constants/app";
 
-const navItems = [
-  { label: "Dashboard", href: ROUTES.DASHBOARD, icon: LayoutDashboard },
-  { label: "Clients", href: ROUTES.CLIENTS, icon: Users },
-  { label: "Projects", href: ROUTES.PROJECTS, icon: FolderKanban },
-  { label: "Timeline", href: ROUTES.TIMELINE, icon: Clock },
-  { label: "Evidence", href: ROUTES.EVIDENCE, icon: FileCheck },
-  { label: "Risks", href: ROUTES.RISKS, icon: AlertTriangle },
-  { label: "Approvals", href: ROUTES.APPROVALS, icon: CheckCircle2 },
-  { label: "Audit", href: ROUTES.AUDIT, icon: ScrollText },
-  { label: "Billing", href: ROUTES.BILLING, icon: CreditCard },
-  { label: "Settings", href: ROUTES.SETTINGS, icon: Settings },
+const navSections = [
+  {
+    items: [
+      { label: "Dashboard", href: ROUTES.DASHBOARD, icon: LayoutDashboard },
+    ],
+  },
+  {
+    label: "Work",
+    items: [
+      { label: "Clients", href: ROUTES.CLIENTS, icon: Users },
+      { label: "Projects", href: ROUTES.PROJECTS, icon: FolderKanban },
+      { label: "Timeline", href: ROUTES.TIMELINE, icon: Clock },
+      { label: "Evidence", href: ROUTES.EVIDENCE, icon: FileCheck },
+    ],
+  },
+  {
+    label: "Governance",
+    items: [
+      { label: "Risks", href: ROUTES.RISKS, icon: AlertTriangle },
+      { label: "Approvals", href: ROUTES.APPROVALS, icon: CheckCircle2 },
+      { label: "Audit", href: ROUTES.AUDIT, icon: ScrollText },
+      { label: "Billing", href: ROUTES.BILLING, icon: CreditCard },
+    ],
+  },
+  {
+    items: [
+      { label: "Settings", href: ROUTES.SETTINGS, icon: Settings },
+    ],
+  },
 ];
 
 export function Sidebar() {
@@ -70,44 +88,58 @@ export function Sidebar() {
         </button>
       </div>
 
-      <nav className="flex flex-col gap-1 p-2 overflow-y-auto h-[calc(100vh-var(--header-height))]">
-        {navItems.map((item) => {
-          const isActive =
-            pathname === item.href || pathname.startsWith(item.href + "/");
-          const Icon = item.icon;
-          return (
-            <Link
-              key={item.href}
-              href={item.href}
-              className={cn(
-                "flex items-center gap-3 rounded-[var(--radius-lg)] px-3 py-2.5 text-sm font-medium transition-colors",
-                isActive
-                  ? "bg-primary-light text-primary"
-                  : "text-text-muted hover:bg-bg-subtle hover:text-text"
-              )}
-              aria-current={isActive ? "page" : undefined}
-              title={!sidebarOpen ? item.label : undefined}
-            >
-              <Icon className="h-5 w-5 shrink-0" aria-hidden="true" />
-              {sidebarOpen && <span>{item.label}</span>}
-            </Link>
-          );
-        })}
+      <nav className="flex flex-col gap-0.5 p-2 overflow-y-auto h-[calc(100vh-var(--header-height))]">
+        {navSections.map((section, si) => (
+          <div key={si} className={cn(si > 0 && "mt-3 pt-3 border-t border-border/50")}>
+            {section.label && sidebarOpen && (
+              <p className="px-3 pb-1.5 text-[11px] font-semibold uppercase tracking-wider text-text-muted/60">
+                {section.label}
+              </p>
+            )}
+            {section.items.map((item) => {
+              const isActive =
+                pathname === item.href || pathname.startsWith(item.href + "/");
+              const Icon = item.icon;
+              return (
+                <Link
+                  key={item.href}
+                  href={item.href}
+                  className={cn(
+                    "group relative flex items-center gap-3 rounded-[var(--radius-lg)] px-3 py-2 text-[13px] font-medium transition-all duration-150",
+                    isActive
+                      ? "bg-primary/10 text-primary shadow-[var(--shadow-sm)]"
+                      : "text-text-muted hover:bg-bg-subtle hover:text-text"
+                  )}
+                  aria-current={isActive ? "page" : undefined}
+                  title={!sidebarOpen ? item.label : undefined}
+                >
+                  {isActive && (
+                    <div className="absolute left-0 top-1/2 h-5 w-[3px] -translate-y-1/2 rounded-r-full bg-primary" />
+                  )}
+                  <Icon className={cn("h-[18px] w-[18px] shrink-0", isActive && "text-primary")} aria-hidden="true" />
+                  {sidebarOpen && <span>{item.label}</span>}
+                </Link>
+              );
+            })}
+          </div>
+        ))}
 
         {isDemo && (
-          <Link
-            href={ROUTES.DEMO}
-            className={cn(
-              "flex items-center gap-3 rounded-[var(--radius-lg)] px-3 py-2.5 text-sm font-medium transition-colors mt-2 border border-dashed border-secondary/40",
-              pathname === ROUTES.DEMO
-                ? "bg-secondary-light text-secondary"
-                : "text-secondary hover:bg-secondary-light/50"
-            )}
-            aria-current={pathname === ROUTES.DEMO ? "page" : undefined}
-          >
-            <Play className="h-5 w-5 shrink-0" aria-hidden="true" />
-            {sidebarOpen && <span>Demo Simulator</span>}
-          </Link>
+          <div className="mt-3 pt-3 border-t border-border/50">
+            <Link
+              href={ROUTES.DEMO}
+              className={cn(
+                "flex items-center gap-3 rounded-[var(--radius-lg)] px-3 py-2 text-[13px] font-medium transition-all duration-150 border border-dashed border-secondary/30",
+                pathname === ROUTES.DEMO
+                  ? "bg-secondary/10 text-secondary shadow-[var(--shadow-sm)]"
+                  : "text-secondary/70 hover:bg-secondary/5 hover:text-secondary"
+              )}
+              aria-current={pathname === ROUTES.DEMO ? "page" : undefined}
+            >
+              <Play className="h-[18px] w-[18px] shrink-0" aria-hidden="true" />
+              {sidebarOpen && <span>Demo Simulator</span>}
+            </Link>
+          </div>
         )}
       </nav>
     </aside>

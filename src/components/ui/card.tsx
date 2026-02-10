@@ -28,9 +28,22 @@ export function Card({ children, padding = "md", className, ...props }: CardProp
   );
 }
 
-export function CardHeader({ children, className, ...props }: HTMLAttributes<HTMLDivElement>) {
+interface CardHeaderProps extends HTMLAttributes<HTMLDivElement> {
+  row?: boolean;
+}
+
+export function CardHeader({ children, className, row = false, ...props }: CardHeaderProps) {
   return (
-    <div className={cn("flex items-center justify-between gap-4 pb-4", className)} {...props}>
+    <div
+      className={cn(
+        "pb-4",
+        row
+          ? "flex items-center justify-between gap-4"
+          : "flex flex-col gap-1.5",
+        className
+      )}
+      {...props}
+    >
       {children}
     </div>
   );
@@ -62,7 +75,7 @@ export function CardContent({ children, className, ...props }: HTMLAttributes<HT
 
 export function CardFooter({ children, className, ...props }: HTMLAttributes<HTMLDivElement>) {
   return (
-    <div className={cn("flex items-center gap-3 pt-4 border-t border-border", className)} {...props}>
+    <div className={cn("flex items-center gap-3 pt-4", className)} {...props}>
       {children}
     </div>
   );

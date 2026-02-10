@@ -34,22 +34,29 @@ export default function SignUpPage() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-bg p-4">
-      <div className="w-full max-w-md">
-        <div className="text-center mb-8">
+    <div className="relative min-h-screen flex items-center justify-center bg-bg p-4 noise overflow-hidden">
+      <div className="pointer-events-none absolute inset-0" aria-hidden="true">
+        <div className="absolute left-1/2 top-1/3 h-[600px] w-[600px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-gradient-to-br from-primary/[0.07] via-secondary/[0.03] to-transparent blur-3xl animate-hero-glow" />
+        <div className="absolute left-1/4 bottom-0 h-[300px] w-[300px] rounded-full bg-primary/[0.04] blur-3xl animate-hero-glow" style={{ animationDelay: "-10s" }} />
+      </div>
+
+      <div className="relative w-full max-w-[420px]">
+        <div className="text-center mb-8 animate-fade-in-down">
           <Link href="/" className="inline-flex items-center gap-2.5">
-            <div className="h-10 w-10 rounded-[var(--radius-lg)] bg-primary flex items-center justify-center">
-              <span className="text-lg font-bold text-primary-foreground">P</span>
+            <div className="h-10 w-10 rounded-xl bg-gradient-to-br from-primary to-secondary flex items-center justify-center shadow-[var(--shadow-lg)] animate-float">
+              <span className="text-sm font-bold text-white">P</span>
             </div>
-            <span className="text-xl font-semibold text-text">ProofDesk AI</span>
+            <span className="text-lg font-semibold text-text">
+              ProofDesk <span className="text-gradient">AI</span>
+            </span>
           </Link>
         </div>
 
-        <Card>
+        <Card className="glow-card animate-scale-in-bounce">
           <form onSubmit={handleSubmit(onSubmit)}>
             <CardHeader>
-              <CardTitle>Create your account</CardTitle>
-              <CardDescription>Start your free trial of ProofDesk AI</CardDescription>
+              <CardTitle className="text-center">Create your account</CardTitle>
+              <CardDescription className="text-center">Start your free trial of ProofDesk AI</CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
               <Input label="Full Name" placeholder="Jane Smith" autoComplete="name" error={errors.name?.message} {...register("name")} />
@@ -61,7 +68,7 @@ export default function SignUpPage() {
               <Button type="submit" loading={isLoading} className="w-full">Create Account</Button>
               <p className="text-sm text-text-muted text-center">
                 Already have an account?{" "}
-                <Link href="/auth/signin" className="text-primary hover:text-primary-hover font-medium">Sign in</Link>
+                <Link href="/auth/signin" className="text-primary hover:text-primary-hover font-medium transition-colors">Sign in</Link>
               </p>
             </CardFooter>
           </form>

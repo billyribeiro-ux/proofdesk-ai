@@ -58,7 +58,7 @@ export default function DashboardPage() {
 
   return (
     <div className="space-y-8">
-      <div className="flex items-center justify-between">
+      <div className="flex items-center justify-between animate-fade-in-up">
         <div>
           <h1 className="text-2xl font-bold text-text">
             {isDemo ? "Demo Dashboard" : `Welcome back, ${user?.name ?? "there"}`}
@@ -80,18 +80,17 @@ export default function DashboardPage() {
       </div>
 
       {/* Stats Grid */}
-      <div ref={cardsRef} className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+      <div ref={cardsRef} className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 stagger-children">
         {stats.map((stat) => {
           const Icon = stat.icon;
           return (
-            <Card key={stat.label} padding="md">
+            <Card key={stat.label} padding="md" className="group glow-card transition-all duration-300 hover:-translate-y-0.5">
               <div className="flex items-start justify-between">
                 <div>
-                  <p className="text-sm text-text-muted">{stat.label}</p>
-                  <p className="text-2xl font-bold text-text mt-1">{stat.value}</p>
-                  <p className="text-xs text-text-muted mt-1">{stat.change}</p>
+                  <p className="text-[13px] text-text-muted">{stat.label}</p>
+                  <p className="text-3xl font-bold text-text mt-1.5 tracking-tight animate-counter-up">{stat.value}</p>
                 </div>
-                <div className={`rounded-[var(--radius-lg)] bg-bg-subtle p-2.5 ${stat.color}`}>
+                <div className={`rounded-xl bg-bg-subtle p-2.5 ${stat.color} transition-all duration-300 group-hover:scale-110 group-hover:bg-primary/10`}>
                   <Icon className="h-5 w-5" aria-hidden="true" />
                 </div>
               </div>
@@ -102,19 +101,19 @@ export default function DashboardPage() {
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Recent Activity */}
-        <Card padding="none" className="lg:col-span-2">
-          <CardHeader className="px-6 pt-6">
+        <Card padding="none" className="lg:col-span-2 glow-card animate-fade-in-up" style={{ animationDelay: "300ms" }}>
+          <CardHeader row className="px-6 pt-6">
             <CardTitle>Recent Activity</CardTitle>
-            <Link href={ROUTES.AUDIT} className="text-sm text-primary hover:text-primary-hover transition-colors flex items-center gap-1">
-              View all <ArrowRight className="h-3.5 w-3.5" />
+            <Link href={ROUTES.AUDIT} className="group text-sm text-primary hover:text-primary-hover transition-colors flex items-center gap-1">
+              View all <ArrowRight className="h-3.5 w-3.5 transition-transform duration-200 group-hover:translate-x-0.5" />
             </Link>
           </CardHeader>
           <CardContent>
-            <div className="divide-y divide-border">
+            <div className="divide-y divide-border/60 stagger-fast">
               {recentLogs.map((item) => (
-                <div key={item.id} className="flex items-center justify-between px-6 py-3.5">
+                <div key={item.id} className="flex items-center justify-between px-6 py-3.5 transition-colors duration-150 hover:bg-bg-subtle/50">
                   <div className="flex items-center gap-3 min-w-0">
-                    <div className="h-2 w-2 rounded-full bg-primary shrink-0" />
+                    <div className="h-2 w-2 rounded-full bg-primary shrink-0 animate-pulse-glow" />
                     <div className="min-w-0">
                       <p className="text-sm text-text truncate">{item.action} {item.entity}</p>
                       <p className="text-xs text-text-muted font-mono">{item.entityId ?? ""}</p>
@@ -134,25 +133,25 @@ export default function DashboardPage() {
         </Card>
 
         {/* Quick Actions */}
-        <Card>
+        <Card className="glow-card animate-fade-in-up" style={{ animationDelay: "400ms" }}>
           <CardHeader>
             <CardTitle>Quick Actions</CardTitle>
           </CardHeader>
-          <CardContent className="space-y-2">
-            <Link href={ROUTES.CLIENTS_NEW} className="flex items-center gap-3 rounded-[var(--radius-lg)] px-3 py-2.5 text-sm hover:bg-bg-subtle transition-colors">
-              <Users className="h-4 w-4 text-text-muted" />
+          <CardContent className="space-y-1 stagger-fast">
+            <Link href={ROUTES.CLIENTS_NEW} className="group flex items-center gap-3 rounded-[var(--radius-lg)] px-3 py-2.5 text-sm transition-all duration-200 hover:bg-bg-subtle hover:translate-x-1">
+              <Users className="h-4 w-4 text-text-muted transition-colors group-hover:text-primary" />
               <span className="text-text">New Client</span>
             </Link>
-            <Link href={ROUTES.PROJECTS} className="flex items-center gap-3 rounded-[var(--radius-lg)] px-3 py-2.5 text-sm hover:bg-bg-subtle transition-colors">
-              <FolderKanban className="h-4 w-4 text-text-muted" />
+            <Link href={ROUTES.PROJECTS} className="group flex items-center gap-3 rounded-[var(--radius-lg)] px-3 py-2.5 text-sm transition-all duration-200 hover:bg-bg-subtle hover:translate-x-1">
+              <FolderKanban className="h-4 w-4 text-text-muted transition-colors group-hover:text-primary" />
               <span className="text-text">New Project</span>
             </Link>
-            <Link href={ROUTES.APPROVALS} className="flex items-center gap-3 rounded-[var(--radius-lg)] px-3 py-2.5 text-sm hover:bg-bg-subtle transition-colors">
-              <CheckCircle2 className="h-4 w-4 text-text-muted" />
+            <Link href={ROUTES.APPROVALS} className="group flex items-center gap-3 rounded-[var(--radius-lg)] px-3 py-2.5 text-sm transition-all duration-200 hover:bg-bg-subtle hover:translate-x-1">
+              <CheckCircle2 className="h-4 w-4 text-text-muted transition-colors group-hover:text-primary" />
               <span className="text-text">Review Approvals</span>
             </Link>
-            <Link href={ROUTES.RISKS} className="flex items-center gap-3 rounded-[var(--radius-lg)] px-3 py-2.5 text-sm hover:bg-bg-subtle transition-colors">
-              <AlertTriangle className="h-4 w-4 text-text-muted" />
+            <Link href={ROUTES.RISKS} className="group flex items-center gap-3 rounded-[var(--radius-lg)] px-3 py-2.5 text-sm transition-all duration-200 hover:bg-bg-subtle hover:translate-x-1">
+              <AlertTriangle className="h-4 w-4 text-text-muted transition-colors group-hover:text-primary" />
               <span className="text-text">Check Risks</span>
             </Link>
           </CardContent>

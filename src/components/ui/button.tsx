@@ -13,14 +13,15 @@ interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
 
 const variantStyles: Record<ButtonVariant, string> = {
   primary:
-    "bg-primary text-primary-foreground hover:bg-primary-hover shadow-[var(--shadow-sm)]",
+    "bg-primary text-primary-foreground shadow-[var(--shadow-sm)] hover:bg-primary-hover hover:shadow-[var(--shadow-md)] active:scale-[0.97] active:shadow-none",
   secondary:
-    "bg-secondary text-white hover:bg-secondary-hover shadow-[var(--shadow-sm)]",
+    "bg-secondary text-white shadow-[var(--shadow-sm)] hover:bg-secondary-hover hover:shadow-[var(--shadow-md)] active:scale-[0.97] active:shadow-none",
   outline:
-    "border border-border bg-transparent text-text hover:bg-bg-subtle",
-  ghost: "bg-transparent text-text hover:bg-bg-subtle",
+    "border border-border bg-transparent text-text hover:bg-bg-subtle hover:border-border-strong active:scale-[0.97]",
+  ghost:
+    "bg-transparent text-text-muted hover:bg-bg-subtle hover:text-text active:scale-[0.97]",
   danger:
-    "bg-danger text-white hover:opacity-90 shadow-[var(--shadow-sm)]",
+    "bg-danger text-white shadow-[var(--shadow-sm)] hover:bg-danger/90 hover:shadow-[var(--shadow-md)] active:scale-[0.97] active:shadow-none",
 };
 
 const sizeStyles: Record<ButtonSize, string> = {
@@ -48,7 +49,7 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
       <button
         ref={ref}
         className={cn(
-          "inline-flex items-center justify-center font-medium rounded-[var(--radius-lg)] transition-colors duration-150",
+          "inline-flex items-center justify-center font-medium rounded-[var(--radius-lg)] transition-all duration-150",
           "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-border-focus",
           "disabled:opacity-50 disabled:pointer-events-none",
           variantStyles[variant],
@@ -57,7 +58,7 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
           className
         )}
         disabled={disabled || loading}
-        aria-busy={loading || undefined}
+        aria-busy={loading ? "true" : undefined}
         {...props}
       >
         {loading && (

@@ -8,140 +8,196 @@ import {
   CreditCard,
   ArrowRight,
   Sparkles,
+  Menu,
 } from "lucide-react";
 
 const features = [
   {
     icon: Clock,
     title: "Canonical Timeline",
-    description: "Automatically ingest and normalize work signals into a single source of truth.",
+    description:
+      "Automatically ingest and normalize work signals from any tool into a single source of truth.",
   },
   {
     icon: Sparkles,
     title: "AI Status Copilot",
-    description: "Generate traceable status summaries with one click. Regenerate in multiple variants.",
+    description:
+      "Generate traceable status summaries with one click. Regenerate in standard, strict, or executive variants.",
   },
   {
     icon: AlertTriangle,
     title: "Risk Monitor",
-    description: "Detect scope creep, delivery delays, and blockers before they become problems.",
+    description:
+      "Detect scope creep, delivery delays, blockers, and budget overruns before they become problems.",
   },
   {
     icon: CheckCircle2,
     title: "Approvals Center",
-    description: "Route approvals and signoffs with full audit trail and decision history.",
+    description:
+      "Route client approvals and internal signoffs with full audit trail and decision history.",
   },
   {
     icon: CreditCard,
     title: "Billing Packets",
-    description: "Generate invoice-ready evidence bundles tied to actual work performed.",
+    description:
+      "Generate invoice-ready evidence bundles tied directly to actual work performed and approved.",
   },
   {
     icon: Shield,
-    title: "Immutable Audit",
-    description: "Every action logged. Every decision traceable. Full compliance confidence.",
+    title: "Immutable Audit Log",
+    description:
+      "Every action logged. Every decision traceable. Full compliance confidence for your clients.",
   },
+];
+
+const steps = [
+  { title: "Connect", desc: "Ingest work signals from your tools" },
+  { title: "Normalize", desc: "Build a canonical event timeline" },
+  { title: "Summarize", desc: "AI generates traceable status reports" },
+  { title: "Monitor", desc: "Detect risks and scope creep early" },
+  { title: "Approve", desc: "Route signoffs with full audit trail" },
+  { title: "Package", desc: "Generate billing evidence packets" },
+  { title: "Audit", desc: "Immutable log of every action taken" },
 ];
 
 export default function MarketingPage() {
   return (
     <div className="min-h-screen bg-bg">
-      <header className="border-b border-border bg-bg-elevated/80 backdrop-blur-sm sticky top-0 z-50">
-        <div className="mx-auto max-w-7xl flex items-center justify-between px-6 h-16">
+      {/* ── Header ────────────────────────────────────────────── */}
+      <header className="sticky top-0 z-50 border-b border-border/60 bg-bg/80 backdrop-blur-lg">
+        <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-6">
           <Link href="/" className="flex items-center gap-2.5">
-            <div className="h-9 w-9 rounded-[var(--radius-lg)] bg-primary flex items-center justify-center">
-              <span className="text-sm font-bold text-primary-foreground">P</span>
+            <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary">
+              <span className="text-xs font-bold text-primary-foreground">P</span>
             </div>
-            <span className="text-lg font-semibold text-text">ProofDesk AI</span>
+            <span className="text-base font-semibold text-text">
+              ProofDesk <span className="text-primary">AI</span>
+            </span>
           </Link>
-          <nav className="hidden md:flex items-center gap-6">
-            <Link href="#features" className="text-sm text-text-muted hover:text-text transition-colors">
+
+          <nav className="hidden items-center gap-8 md:flex">
+            <Link
+              href="#features"
+              className="text-[13px] font-medium text-text-muted transition-colors hover:text-text"
+            >
               Features
             </Link>
-            <Link href="#how-it-works" className="text-sm text-text-muted hover:text-text transition-colors">
+            <Link
+              href="#how-it-works"
+              className="text-[13px] font-medium text-text-muted transition-colors hover:text-text"
+            >
               How It Works
             </Link>
+            <div className="h-4 w-px bg-border" />
             <Link
               href="/auth/signin"
-              className="text-sm font-medium text-text hover:text-primary transition-colors"
+              className="text-[13px] font-medium text-text-muted transition-colors hover:text-text"
             >
               Sign In
             </Link>
             <Link
               href="/auth/signup"
-              className="inline-flex items-center gap-2 rounded-[var(--radius-lg)] bg-primary px-4 py-2 text-sm font-medium text-primary-foreground hover:bg-primary-hover transition-colors shadow-[var(--shadow-sm)]"
+              className="inline-flex items-center gap-1.5 rounded-lg bg-primary px-4 py-2 text-[13px] font-semibold text-primary-foreground shadow-[var(--shadow-sm)] transition-colors hover:bg-primary-hover"
             >
               Get Started
-              <ArrowRight className="h-4 w-4" />
+              <ArrowRight className="h-3.5 w-3.5" />
             </Link>
           </nav>
+
+          <button
+            className="inline-flex h-9 w-9 items-center justify-center rounded-lg text-text-muted transition-colors hover:bg-bg-subtle hover:text-text md:hidden"
+            aria-label="Open menu"
+          >
+            <Menu className="h-5 w-5" />
+          </button>
         </div>
       </header>
 
       <main>
-        {/* Hero */}
-        <section className="relative overflow-hidden">
-          <div className="mx-auto max-w-7xl px-6 py-24 sm:py-32 lg:py-40">
-            <div className="max-w-3xl">
-              <div className="inline-flex items-center gap-2 rounded-[var(--radius-full)] border border-primary/20 bg-primary-light px-3 py-1 text-xs font-medium text-primary mb-6">
+        {/* ── Hero ─────────────────────────────────────────────── */}
+        <section className="relative isolate overflow-hidden noise">
+          {/* Animated gradient mesh background */}
+          <div className="pointer-events-none absolute inset-0 -z-10" aria-hidden="true">
+            <div className="absolute left-1/2 top-1/2 h-[800px] w-[800px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-gradient-to-br from-primary/[0.08] via-secondary/[0.04] to-transparent blur-3xl animate-hero-glow" />
+            <div className="absolute right-0 top-0 h-[500px] w-[500px] rounded-full bg-secondary/[0.05] blur-3xl animate-hero-glow" style={{ animationDelay: "-7s" }} />
+            <div className="absolute left-0 bottom-0 h-[400px] w-[400px] rounded-full bg-primary/[0.04] blur-3xl animate-hero-glow" style={{ animationDelay: "-14s" }} />
+          </div>
+
+          <div className="mx-auto max-w-6xl px-6 pb-24 pt-24 sm:pb-32 sm:pt-32 lg:pb-40 lg:pt-40">
+            <div className="mx-auto max-w-3xl text-center">
+              <div className="mb-8 inline-flex items-center gap-2 rounded-full border border-primary/20 bg-primary-light px-4 py-1.5 text-xs font-semibold tracking-wide text-primary animate-fade-in-down animate-border-glow">
                 <FileCheck className="h-3.5 w-3.5" />
                 AI Governance Platform
               </div>
-              <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold tracking-tight text-text leading-[1.1]">
+
+              <h1 className="text-4xl font-extrabold tracking-tight text-text sm:text-5xl lg:text-[3.5rem] lg:leading-[1.08] animate-fade-in-up" style={{ animationDelay: "100ms" }}>
                 Turn work activity into{" "}
-                <span className="text-primary">trusted client evidence</span>
+                <span className="text-gradient-animated">
+                  trusted client evidence
+                </span>
               </h1>
-              <p className="mt-6 text-lg sm:text-xl text-text-muted leading-relaxed max-w-2xl">
-                ProofDesk AI automatically converts your team&apos;s work signals into
-                risk-aware status reports, approval workflows, and billing-ready
-                evidence packets. Built for agencies and consultancies.
+
+              <p className="mx-auto mt-6 max-w-2xl text-base leading-relaxed text-text-muted sm:text-lg sm:leading-8 animate-fade-in-up" style={{ animationDelay: "200ms" }}>
+                ProofDesk AI automatically converts your team&apos;s work signals
+                into risk-aware status reports, approval workflows, and
+                billing-ready evidence packets.&nbsp;Built for agencies and
+                consultancies.
               </p>
-              <div className="mt-10 flex flex-wrap gap-4">
+
+              <div className="mt-10 flex flex-col items-center justify-center gap-3 sm:flex-row sm:gap-4 animate-fade-in-up" style={{ animationDelay: "350ms" }}>
                 <Link
                   href="/auth/signup"
-                  className="inline-flex items-center gap-2 rounded-[var(--radius-lg)] bg-primary px-6 py-3 text-base font-medium text-primary-foreground hover:bg-primary-hover transition-colors shadow-[var(--shadow-md)]"
+                  className="group inline-flex w-full items-center justify-center gap-2 rounded-xl bg-primary px-7 py-3.5 text-sm font-semibold text-primary-foreground shadow-[var(--shadow-md)] transition-all duration-300 hover:bg-primary-hover hover:shadow-[var(--shadow-lg)] hover:scale-[1.02] active:scale-[0.98] sm:w-auto"
                 >
                   Start Free Trial
-                  <ArrowRight className="h-5 w-5" />
+                  <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-0.5" />
                 </Link>
                 <Link
                   href="/demo"
-                  className="inline-flex items-center gap-2 rounded-[var(--radius-lg)] border border-border bg-bg-elevated px-6 py-3 text-base font-medium text-text hover:bg-bg-subtle transition-colors"
+                  className="inline-flex w-full items-center justify-center gap-2 rounded-xl border border-border bg-bg-elevated px-7 py-3.5 text-sm font-semibold text-text shadow-[var(--shadow-sm)] transition-all duration-300 hover:border-border-strong hover:bg-bg-subtle hover:shadow-[var(--shadow-md)] active:scale-[0.98] sm:w-auto"
                 >
                   Try Live Demo
                 </Link>
               </div>
-            </div>
-          </div>
-          <div className="absolute top-0 right-0 -z-10 w-1/2 h-full bg-gradient-to-l from-primary-light/30 to-transparent" aria-hidden="true" />
-        </section>
 
-        {/* Features */}
-        <section id="features" className="border-t border-border bg-bg-surface">
-          <div className="mx-auto max-w-7xl px-6 py-24 sm:py-32">
-            <div className="text-center max-w-2xl mx-auto mb-16">
-              <h2 className="text-3xl sm:text-4xl font-bold text-text">
-                Everything you need to prove your work
-              </h2>
-              <p className="mt-4 text-lg text-text-muted">
-                From ingestion to invoice, ProofDesk AI covers the complete evidence lifecycle.
+              <p className="mt-6 text-xs text-text-muted animate-fade-in" style={{ animationDelay: "500ms" }}>
+                No credit card required &middot; 14-day free trial &middot; Cancel anytime
               </p>
             </div>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          </div>
+        </section>
+
+        {/* ── Features ────────────────────────────────────────── */}
+        <section id="features" className="relative border-t border-border bg-bg-surface noise">
+          <div className="mx-auto max-w-6xl px-6 py-24 sm:py-32">
+            <div className="mx-auto mb-16 max-w-2xl text-center">
+              <p className="mb-3 text-sm font-semibold uppercase tracking-widest text-primary">
+                Capabilities
+              </p>
+              <h2 className="text-3xl font-bold tracking-tight text-text sm:text-4xl">
+                Everything you need to prove your work
+              </h2>
+              <p className="mt-4 text-base leading-relaxed text-text-muted sm:text-lg">
+                From ingestion to invoice, ProofDesk AI covers the complete
+                evidence lifecycle.
+              </p>
+            </div>
+
+            <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3 stagger-children">
               {features.map((feature) => {
                 const Icon = feature.icon;
                 return (
                   <div
                     key={feature.title}
-                    className="rounded-[var(--radius-xl)] border border-border bg-bg-elevated p-6 shadow-[var(--shadow-sm)] hover:shadow-[var(--shadow-md)] transition-shadow"
+                    className="group relative rounded-2xl border border-border bg-bg-elevated p-6 glow-card transition-all duration-300 hover:-translate-y-1"
                   >
-                    <div className="h-10 w-10 rounded-[var(--radius-lg)] bg-primary-light flex items-center justify-center mb-4">
-                      <Icon className="h-5 w-5 text-primary" />
+                    <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-xl bg-primary/10 transition-all duration-300 group-hover:bg-primary/15 group-hover:scale-110">
+                      <Icon className="h-5 w-5 text-primary transition-transform duration-300 group-hover:scale-110" />
                     </div>
-                    <h3 className="text-base font-semibold text-text mb-2">
+                    <h3 className="mb-2 text-[15px] font-semibold text-text">
                       {feature.title}
                     </h3>
-                    <p className="text-sm text-text-muted leading-relaxed">
+                    <p className="text-sm leading-relaxed text-text-muted">
                       {feature.description}
                     </p>
                   </div>
@@ -151,70 +207,141 @@ export default function MarketingPage() {
           </div>
         </section>
 
-        {/* How It Works */}
-        <section id="how-it-works" className="border-t border-border">
-          <div className="mx-auto max-w-7xl px-6 py-24 sm:py-32">
-            <div className="text-center max-w-2xl mx-auto mb-16">
-              <h2 className="text-3xl sm:text-4xl font-bold text-text">
-                How it works
+        {/* ── How It Works ────────────────────────────────────── */}
+        <section id="how-it-works" className="relative border-t border-border noise">
+          <div className="mx-auto max-w-6xl px-6 py-24 sm:py-32">
+            <div className="mx-auto mb-16 max-w-2xl text-center">
+              <p className="mb-3 text-sm font-semibold uppercase tracking-widest text-primary">
+                Workflow
+              </p>
+              <h2 className="text-3xl font-bold tracking-tight text-text sm:text-4xl">
+                From raw signals to billing-ready evidence
               </h2>
-              <p className="mt-4 text-lg text-text-muted">
-                Seven steps from raw work signals to billing-ready evidence.
+              <p className="mt-4 text-base leading-relaxed text-text-muted sm:text-lg">
+                Seven steps. Fully automated. Completely auditable.
               </p>
             </div>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-              {[
-                { step: "1", title: "Connect", desc: "Ingest work signals from your tools" },
-                { step: "2", title: "Normalize", desc: "Build a canonical event timeline" },
-                { step: "3", title: "Summarize", desc: "AI generates traceable status reports" },
-                { step: "4", title: "Monitor", desc: "Detect risks and scope creep early" },
-                { step: "5", title: "Approve", desc: "Route signoffs with full audit trail" },
-                { step: "6", title: "Package", desc: "Generate billing evidence packets" },
-                { step: "7", title: "Audit", desc: "Immutable log of every action taken" },
-              ].map((item) => (
-                <div key={item.step} className="text-center">
-                  <div className="mx-auto h-12 w-12 rounded-full bg-primary flex items-center justify-center text-lg font-bold text-primary-foreground mb-4">
-                    {item.step}
+
+            <div className="mx-auto grid max-w-2xl grid-cols-1 gap-4 sm:grid-cols-[1fr_auto_1fr] sm:gap-x-0 sm:gap-y-8">
+              {steps.map((item, i) => {
+                const isLeft = i % 2 === 0;
+                return (
+                  <div key={item.title} className="contents">
+                    {/* Left column */}
+                    <div className="hidden items-center justify-end sm:flex">
+                      {isLeft ? (
+                        <div className="pr-8 text-right">
+                          <h3 className="text-[15px] font-semibold text-text">
+                            {item.title}
+                          </h3>
+                          <p className="mt-0.5 text-sm text-text-muted">
+                            {item.desc}
+                          </p>
+                        </div>
+                      ) : null}
+                    </div>
+
+                    {/* Center: step number */}
+                    <div className="flex items-center gap-4 sm:flex-col sm:gap-0">
+                      <div className="relative z-10 flex h-11 w-11 shrink-0 items-center justify-center rounded-full border-2 border-primary/30 bg-bg-elevated text-sm font-bold text-primary shadow-[var(--shadow-sm)] transition-all duration-300 hover:scale-110 hover:border-primary/60 hover:shadow-[0_0_16px_-2px_var(--primary)]">
+                        {i + 1}
+                      </div>
+                      {/* Mobile text */}
+                      <div className="sm:hidden">
+                        <h3 className="text-[15px] font-semibold text-text">
+                          {item.title}
+                        </h3>
+                        <p className="mt-0.5 text-sm text-text-muted">
+                          {item.desc}
+                        </p>
+                      </div>
+                    </div>
+
+                    {/* Right column */}
+                    <div className="hidden items-center sm:flex">
+                      {!isLeft ? (
+                        <div className="pl-8">
+                          <h3 className="text-[15px] font-semibold text-text">
+                            {item.title}
+                          </h3>
+                          <p className="mt-0.5 text-sm text-text-muted">
+                            {item.desc}
+                          </p>
+                        </div>
+                      ) : null}
+                    </div>
                   </div>
-                  <h3 className="text-base font-semibold text-text mb-1">{item.title}</h3>
-                  <p className="text-sm text-text-muted">{item.desc}</p>
-                </div>
-              ))}
+                );
+              })}
             </div>
           </div>
         </section>
 
-        {/* CTA */}
-        <section className="border-t border-border bg-bg-surface">
-          <div className="mx-auto max-w-7xl px-6 py-24 sm:py-32 text-center">
-            <h2 className="text-3xl sm:text-4xl font-bold text-text mb-4">
-              Ready to prove your work?
-            </h2>
-            <p className="text-lg text-text-muted mb-8 max-w-xl mx-auto">
-              Join agencies and consultancies who trust ProofDesk AI to convert activity into evidence.
-            </p>
-            <Link
-              href="/auth/signup"
-              className="inline-flex items-center gap-2 rounded-[var(--radius-lg)] bg-primary px-8 py-3.5 text-base font-medium text-primary-foreground hover:bg-primary-hover transition-colors shadow-[var(--shadow-md)]"
-            >
-              Start Free Trial
-              <ArrowRight className="h-5 w-5" />
-            </Link>
+        {/* ── CTA ─────────────────────────────────────────────── */}
+        <section className="relative border-t border-border bg-bg-surface noise overflow-hidden">
+          {/* Background glow */}
+          <div className="pointer-events-none absolute inset-0" aria-hidden="true">
+            <div className="absolute left-1/2 top-1/2 h-[500px] w-[600px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-primary/[0.05] blur-3xl animate-hero-glow" />
+          </div>
+
+          <div className="relative mx-auto max-w-6xl px-6 py-24 sm:py-32">
+            <div className="mx-auto max-w-2xl text-center">
+              <h2 className="text-3xl font-bold tracking-tight text-text sm:text-4xl">
+                Ready to prove your work?
+              </h2>
+              <p className="mx-auto mt-4 max-w-lg text-base leading-relaxed text-text-muted sm:text-lg">
+                Join agencies and consultancies who trust ProofDesk AI to convert
+                activity into evidence.
+              </p>
+              <div className="mt-10 flex flex-col items-center justify-center gap-3 sm:flex-row sm:gap-4">
+                <Link
+                  href="/auth/signup"
+                  className="group inline-flex w-full items-center justify-center gap-2 rounded-xl bg-primary px-8 py-3.5 text-sm font-semibold text-primary-foreground shadow-[var(--shadow-md)] transition-all duration-300 hover:bg-primary-hover hover:shadow-[var(--shadow-lg)] hover:scale-[1.02] active:scale-[0.98] sm:w-auto"
+                >
+                  Start Free Trial
+                  <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-0.5" />
+                </Link>
+                <Link
+                  href="/demo"
+                  className="inline-flex w-full items-center justify-center gap-2 rounded-xl border border-border bg-bg-elevated px-8 py-3.5 text-sm font-semibold text-text shadow-[var(--shadow-sm)] transition-all duration-300 hover:border-border-strong hover:bg-bg-subtle hover:shadow-[var(--shadow-md)] active:scale-[0.98] sm:w-auto"
+                >
+                  Try Live Demo
+                </Link>
+              </div>
+            </div>
           </div>
         </section>
       </main>
 
-      <footer className="border-t border-border bg-bg-elevated">
-        <div className="mx-auto max-w-7xl px-6 py-8 flex flex-col sm:flex-row items-center justify-between gap-4">
-          <p className="text-sm text-text-muted">
-            &copy; {new Date().getFullYear()} ProofDesk AI. All rights reserved.
-          </p>
+      {/* ── Footer ──────────────────────────────────────────── */}
+      <footer className="border-t border-border">
+        <div className="mx-auto flex max-w-6xl flex-col items-center justify-between gap-4 px-6 py-8 sm:flex-row">
+          <div className="flex items-center gap-2.5">
+            <div className="flex h-6 w-6 items-center justify-center rounded-md bg-primary">
+              <span className="text-[10px] font-bold text-primary-foreground">P</span>
+            </div>
+            <span className="text-sm text-text-muted">
+              &copy; {new Date().getFullYear()} ProofDesk AI
+            </span>
+          </div>
           <div className="flex items-center gap-6">
-            <Link href="#" className="text-sm text-text-muted hover:text-text transition-colors">
+            <Link
+              href="#"
+              className="text-sm text-text-muted transition-colors hover:text-text"
+            >
               Privacy
             </Link>
-            <Link href="#" className="text-sm text-text-muted hover:text-text transition-colors">
+            <Link
+              href="#"
+              className="text-sm text-text-muted transition-colors hover:text-text"
+            >
               Terms
+            </Link>
+            <Link
+              href="#"
+              className="text-sm text-text-muted transition-colors hover:text-text"
+            >
+              Contact
             </Link>
           </div>
         </div>

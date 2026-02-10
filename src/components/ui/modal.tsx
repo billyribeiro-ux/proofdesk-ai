@@ -89,20 +89,20 @@ export function Modal({
       aria-describedby={description ? "modal-description" : undefined}
     >
       <div
-        className="absolute inset-0 bg-[var(--bg-overlay)] animate-in fade-in duration-200"
+        className="absolute inset-0 bg-[var(--bg-overlay)] animate-fade-in"
         onClick={onClose}
         aria-hidden="true"
       />
       <div
         ref={contentRef}
         className={cn(
-          "relative w-full rounded-[var(--radius-xl)] border border-border bg-bg-elevated shadow-[var(--shadow-xl)]",
-          "animate-in fade-in zoom-in-95 duration-200",
+          "relative w-full rounded-[var(--radius-xl)] border border-border bg-bg-elevated glow-card",
+          "animate-scale-in-bounce",
           sizeStyles[size],
           className
         )}
       >
-        <div className="flex items-start justify-between gap-4 border-b border-border p-4 sm:p-6">
+        <div className="flex items-start justify-between gap-4 border-b border-border/60 p-4 sm:p-6">
           <div>
             <h2 id="modal-title" className="text-lg font-semibold text-text">
               {title}
@@ -115,7 +115,7 @@ export function Modal({
           </div>
           <button
             onClick={onClose}
-            className="rounded-[var(--radius-md)] p-1.5 text-text-muted hover:bg-bg-subtle hover:text-text transition-colors"
+            className="rounded-[var(--radius-lg)] p-1.5 text-text-muted hover:bg-bg-subtle hover:text-text transition-all duration-150 hover:rotate-90"
             aria-label="Close dialog"
           >
             <X className="h-5 w-5" />

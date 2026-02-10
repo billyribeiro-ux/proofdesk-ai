@@ -24,15 +24,15 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
           ref={ref}
           id={inputId}
           className={cn(
-            "h-10 w-full rounded-[var(--radius-lg)] border border-border bg-bg px-3 text-sm text-text",
-            "placeholder:text-text-muted",
-            "focus:outline-none focus:ring-2 focus:ring-border-focus focus:border-transparent",
+            "h-10 w-full rounded-[var(--radius-lg)] border border-border bg-bg-subtle/50 px-3 text-sm text-text",
+            "placeholder:text-text-muted/60",
+            "focus:outline-none focus:ring-2 focus:ring-border-focus/40 focus:border-border-focus focus:bg-bg",
             "disabled:opacity-50 disabled:cursor-not-allowed",
-            "transition-colors duration-150",
+            "transition-all duration-200",
             error && "border-danger focus:ring-danger",
             className
           )}
-          aria-invalid={error ? true : undefined}
+          aria-invalid={error ? "true" : undefined}
           aria-describedby={
             error ? `${inputId}-error` : hint ? `${inputId}-hint` : undefined
           }

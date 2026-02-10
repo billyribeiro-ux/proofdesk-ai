@@ -21,15 +21,15 @@ const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(
           ref={ref}
           id={textareaId}
           className={cn(
-            "min-h-[80px] w-full rounded-[var(--radius-lg)] border border-border bg-bg px-3 py-2 text-sm text-text",
-            "placeholder:text-text-muted",
-            "focus:outline-none focus:ring-2 focus:ring-border-focus focus:border-transparent",
+            "min-h-[80px] w-full rounded-[var(--radius-lg)] border border-border bg-bg-subtle/50 px-3 py-2 text-sm text-text",
+            "placeholder:text-text-muted/60",
+            "focus:outline-none focus:ring-2 focus:ring-border-focus/40 focus:border-border-focus focus:bg-bg",
             "disabled:opacity-50 disabled:cursor-not-allowed",
-            "resize-y transition-colors duration-150",
+            "resize-y transition-all duration-200",
             error && "border-danger focus:ring-danger",
             className
           )}
-          aria-invalid={error ? true : undefined}
+          aria-invalid={error ? "true" : undefined}
           aria-describedby={
             error
               ? `${textareaId}-error`
